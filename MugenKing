@@ -1,0 +1,116 @@
+-- Create GUI
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local ExecuteButton = Instance.new("TextButton")
+local ClearButton = Instance.new("TextButton")
+local ToggleButton = Instance.new("TextButton")
+local SaveButton = Instance.new("TextButton")
+local LoadButton = Instance.new("TextButton")
+local SavedScript = ""
+local isOpen = true
+
+-- Parent GUI to Player's PlayerGui
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Frame properties
+Frame.Size = UDim2.new(0, 250, 0, 200)
+Frame.Position = UDim2.new(0.5, -125, 0.5, -100)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 50)
+Frame.Visible = true
+Frame.Parent = ScreenGui
+
+-- TextBox properties
+TextBox.Size = UDim2.new(0.9, 0, 0.4, 0)
+TextBox.Position = UDim2.new(0.05, 0, 0.1, 0)
+TextBox.Text = "-- Enter Lua code here"
+TextBox.MultiLine = true
+TextBox.ClearTextOnFocus = false
+TextBox.BackgroundColor3 = Color3.fromRGB(10, 10, 30)
+TextBox.TextColor3 = Color3.fromRGB(200, 200, 255)
+TextBox.Parent = Frame
+
+-- Execute Button properties
+ExecuteButton.Size = UDim2.new(0.4, 0, 0.15, 0)
+ExecuteButton.Position = UDim2.new(0.05, 0, 0.55, 0)
+ExecuteButton.Text = "Execute"
+ExecuteButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+ExecuteButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecuteButton.Parent = Frame
+
+-- Clear Button properties
+ClearButton.Size = UDim2.new(0.4, 0, 0.15, 0)
+ClearButton.Position = UDim2.new(0.55, 0, 0.55, 0)
+ClearButton.Text = "Clear"
+ClearButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+ClearButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ClearButton.Parent = Frame
+
+-- Save Button properties
+SaveButton.Size = UDim2.new(0.4, 0, 0.15, 0)
+SaveButton.Position = UDim2.new(0.05, 0, 0.75, 0)
+SaveButton.Text = "Save Script"
+SaveButton.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+SaveButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+SaveButton.Parent = Frame
+
+-- Load Button properties
+LoadButton.Size = UDim2.new(0.4, 0, 0.15, 0)
+LoadButton.Position = UDim2.new(0.55, 0, 0.75, 0)
+LoadButton.Text = "Load Script"
+LoadButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
+LoadButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+LoadButton.Parent = Frame
+
+-- Toggle Button properties
+ToggleButton.Size = UDim2.new(0, 100, 0, 30)
+ToggleButton.Position = UDim2.new(0, 10, 0, 10)
+ToggleButton.Text = "Toggle GUI"
+ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 200, 0)
+ToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+ToggleButton.Parent = ScreenGui
+
+-- Function to execute Lua code
+local function executeCode()
+    local code = TextBox.Text
+    local func, err = loadstring(code)
+    if func then
+        func()
+    else
+        warn("Error executing script: " .. err)
+    end
+end
+
+-- Function to clear TextBox
+local function clearText()
+    TextBox.Text = ""
+end
+
+-- Function to toggle GUI visibility
+local function toggleGUI()
+    isOpen = not isOpen
+    Frame.Visible = isOpen
+end
+
+-- Function to save script
+local function saveScript()
+    SavedScript = TextBox.Text
+    print("Script saved!")
+end
+
+-- Function to load saved script
+local function loadScript()
+    if SavedScript ~= "" then
+        TextBox.Text = SavedScript
+        print("Script loaded!")
+    else
+        print("No script saved!")
+    end
+end
+
+-- Connect buttons to functions
+ExecuteButton.MouseButton1Click:Connect(executeCode)
+ClearButton.MouseButton1Click:Connect(clearText)
+SaveButton.MouseButton1Click:Connect(saveScript)
+LoadButton.MouseButton1Click:Connect(loadScript)
+ToggleButton.MouseButton1Click:Connect(toggleGUI)
